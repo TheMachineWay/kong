@@ -225,6 +225,7 @@ This will trigger the Commitizen interactive prompt for building your commit mes
 - exported or created icons locally in svg format. In real world scenario would recommend icons and images on a CDN
 - There were font sizes used in figma with sizes 12px, 13px etc. Have created uniform sizing of 12px. limited font sizes to 10, 12, 14, 16, 20 and 32px
 - Service cards stretch to full width as sometimes on some screen sizes there was a lot of white space on the right side
+- API url is read from environment variable `VITE_API_URL`. If no env variable is set then default is set to `/`
 
 
 ## Implemented Features
