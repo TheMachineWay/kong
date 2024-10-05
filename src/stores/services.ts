@@ -34,9 +34,9 @@ const useServicesStore = defineStore('services', () => {
   async function fetchServices(searchQuery?: string) {
     try {
       servicesStatus.value = 'loading'
-      let url = '/api/services'
+      let url = `${import.meta.env.VITE_API_URL || ''}/api/services`
       if (searchQuery) {
-        url = `/api/services?q=${searchQuery}`
+        url = `${url}?q=${searchQuery}`
       }
       const { data } = await axios.get(url)
       if (searchQuery && isInitialCallComplete.value) {
@@ -52,7 +52,7 @@ const useServicesStore = defineStore('services', () => {
   }
 
   function fetchServiceById(serviceId: string) {
-    return serviceList.value.find(service => service.id === serviceId) || null
+    return serviceList.value?.find(service => service.id === serviceId) || null
   }
 
   return {
