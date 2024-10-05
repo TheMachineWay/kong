@@ -1,18 +1,24 @@
 <template>
   <div
     class="logo"
+    data-testid="logo"
     @click="emit('click')"
   >
-    <router-link to="/">
+    <router-link
+      data-testid="logo-router-link"
+      to="/"
+    >
       <img
         alt="kong logo"
         class="kong-logo"
+        data-testid="kong-logo"
         height="25.48"
         src="@/assets/images/logo.svg"
         width="29"
       >
       <img
-        alt="Logo"
+        alt="konnect logo"
+        data-testid="konnect-logo"
         height="25.48"
         src="@/assets/images/konnect.svg"
         width="99.45"
