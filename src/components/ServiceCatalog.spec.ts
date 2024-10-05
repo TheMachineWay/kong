@@ -1,4 +1,7 @@
-import { vi, describe, it, expect } from 'vitest'
+import { vi, describe, it, expect, beforeEach } from 'vitest'
+import { createPinia, setActivePinia } from 'pinia'
+import { createRouter, createWebHistory } from 'vue-router'
+
 import { mount } from '@vue/test-utils'
 import ServiceCatalog from './ServiceCatalog.vue'
 import servicesData from '../../mocks/services'
@@ -22,11 +25,38 @@ vi.mock('axios', async () => {
   }
 })
 
-// Example component test for ServiceCatalog.vue
+const router = createRouter({
+  history: createWebHistory(),
+  routes: [],
+})
+
+function mountComponent() {
+  return mount(ServiceCatalog, {
+    global: {
+      plugins: [router],
+    },
+  })
+}
+
+vi.mock('vue-router', async (importOriginal) => {
+  const vueRouter = await importOriginal() as any
+  return {
+    ...vueRouter,
+    useRoute: () => ({
+      query: {
+        q: 'tele',
+      },
+    }),
+  }
+})
+
 describe('ServiceCatalog', () => {
+  beforeEach(() => {
+    setActivePinia(createPinia())
+  })
   it('shows the search input', async () => {
     // No `mockedResponses` modification needed; just use the default mocked response
-    const wrapper = mount(ServiceCatalog)
+    const wrapper = mountComponent()
 
     expect(wrapper.findTestId('search-input').isVisible()).toBe(true)
   })
@@ -37,7 +67,7 @@ describe('ServiceCatalog', () => {
       data: [],
     })
 
-    const wrapper = mount(ServiceCatalog)
+    const wrapper = mountComponent()
 
     expect(wrapper.findTestId('no-results').isVisible()).toBe(true)
   })

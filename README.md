@@ -197,3 +197,73 @@ pnpm commit
 ```
 
 This will trigger the Commitizen interactive prompt for building your commit message.
+
+
+
+# Abhishek's Notes
+
+## Milestones
+
+### Must
+1. [x] export the images and icons from figma
+2. [x] Identify css variables from figma
+2. [x] Create the App header
+3. [x] Create the routing for links
+4. [x] Add pinia store and implement debounce and search functionality
+5. [x] Implement the Service header component
+6. [x] Implement the Service Card component
+7. [x] Add error handling
+8. [x] Implement the pagination
+9. [x] Implement the Version view modal
+10. [ ] Tests
+11. [x] Mobile design
+12. [x] Mobile nav
+13. [x] Add skeleton loader
+
+## Assumptions and trade-offs
+- largest mobile screen 540px and largest tablet at 840px. any screen larger than 840 will get desktop view
+- exported or created icons locally in svg format. In real world scenario would recommend icons and images on a CDN
+- There were font sizes used in figma with sizes 12px, 13px etc. Have created uniform sizing of 12px. limited font sizes to 10, 12, 14, 16, 20 and 32px
+- Service cards stretch to full width as sometimes on some screen sizes there was a lot of white space on the right side
+
+
+## Implemented Features
+- Pinia store is added to store the services
+- Debounce is added to search the services
+- Skeleton loader is added to show the loading state when service call is in progress
+- Modal is added in teleport layer to show the version details and mobile nav
+- search results are bookmarkable as search queries are stored in the url
+- pagination is bookmarkable as well as current page number is stored in url
+- Placeholder pages for Organization and Settings are added
+- Service description is truncated on second line and a title is added. The description is shown in browser native title if mouse stays long enough on the description. Ideally this should be added with tooltip
+
+## Suggested features
+
+### Dev features
+0. Login or sign up functionality
+1. Ability to add tags in services
+2. Filtering and sorting of services based on status, latest versions, tags, etc
+3. Search with autocomplete UI
+4. Analytics for user interactions
+5. Multi language support
+6. Api rate limiting
+7. Dark mode: Since target users are developers
+8. Accessibility: ARIA roles, keyboard navigation, etc
+9. CI/CD pipeline
+10. UI walkthrough for first time users
+
+
+### Social features
+1. a way for users to discover other users and connect with them. It could be achieved in several ways
+  a. By trending services
+  b. trending users
+  c. By a global search where users can search for all services on the platform
+2. Ability to mark own services public or private
+3. Ability to bookmark, like, or comment on services of other users
+4. Rating and scores
+5. Badge system for developers when they create services. Some badges could be
+  a. Star: When user's service appears in trending services
+  b. Pro: When user has created more than x number of services
+  c. Streak
+  d. Collaborator
+6. Notifications

@@ -8,6 +8,21 @@ const router = createRouter({
       name: 'home',
       component: () => import('../views/PageHome.vue'),
     },
+    {
+      path: '/organization',
+      name: 'organization',
+      component: () => import('../views/PageOrganization.vue'),
+    },
+    {
+      path: '/settings',
+      name: 'settings',
+      component: () => import('../views/PageSettings.vue'),
+    },
+    {
+      path:'/:pathMatch(.*)',
+      name: 'bad-not-found',
+      component: () => import('../views/PageNotFound.vue'),
+    },
   ],
 })
 

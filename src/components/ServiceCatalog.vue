@@ -1,28 +1,29 @@
 <template>
   <div class="service-catalog">
-    <h1>Service Catalog</h1>
-    <input
-      v-model="searchQuery"
-      class="search-input"
-      data-testid="search-input"
-      placeholder="Search services"
-    >
-    <ul
-      v-if="services.length"
+    <ServiceCatalogHeader />
+    <div
+      v-if="servicesStatus === 'loading'"
       class="catalog"
     >
-      <li
-        v-for="service in services"
+      <ServiceCardLoader
+        v-for="i in 12"
+        :key="i"
+      />
+    </div>
+    <ErrorScreen
+      v-if="servicesStatus === 'error'"
+      show-reload
+    />
+    <ul
+      v-else-if="serviceList.length"
+      class="catalog"
+    >
+      <ServiceCard
+        v-for="service in serviceList"
         :key="service.id"
-        class="service"
-      >
-        <div>
-          <p>
-            {{ service.name }}
-          </p>
-          <p>{{ service.description }}</p>
-        </div>
-      </li>
+        :service="service"
+        @open="() => toggleModal(service)"
+      />
     </ul>
     <div
       v-else
@@ -30,63 +31,96 @@
     >
       No services
     </div>
+    <ServicePagination v-if="totalServices > PAGINATION_SIZE" />
   </div>
+  <ServiceDetailModal
+    v-if="selectedService"
+    :service="selectedService"
+    @close="toggleModal"
+  />
 </template>
 
-<script lang="ts">
-import { defineComponent, ref } from 'vue'
-import useServices from '@/composables/useServices'
+<script lang="ts" setup>
+import { ref, watch } from 'vue'
+import { useRouter, useRoute } from 'vue-router'
 
-export default defineComponent({
-  name: 'ServiceCatalog',
-  setup() {
-    // Import services from the composable
-    const { services, loading } = useServices()
+import { storeToRefs } from 'pinia'
+import useServicesStore from '@/stores/services'
+import ServiceCatalogHeader from './ServiceCatalogHeader.vue'
+import ServiceCard from './ServiceCard/ServiceCard.vue'
+import ServicePagination from './ServicePagination.vue'
+import { PAGINATION_SIZE } from '@/constants'
+import ServiceDetailModal from './ServiceDetailModal.vue'
+import ErrorScreen from './ErrorScreen.vue'
+import ServiceCardLoader from './ServiceCard/ServiceCardLoader.vue'
 
-    // Set the search string to a Vue ref
-    const searchQuery = ref('')
+import type { IService } from '@/types'
 
-    return {
-      services,
-      loading,
-      searchQuery,
-    }
-  },
+const route = useRoute()
+const router = useRouter()
+
+const serviceStore = useServicesStore()
+const {
+  servicesStatus,
+  serviceList,
+  totalServices,
+} = storeToRefs(serviceStore)
+
+const selectedService = ref<IService | null>(null)
+
+// this is used as we do not have a wait to finish the services api which is fired on app load
+const hasFetchedServiceDetailOnInit = ref(false)
+
+function toggleModal(service?: IService | null) {
+  if (service) {
+    selectedService.value = service
+    router.push({
+      query: {
+        ...(route.query || {}),
+        service: service.id,
+      },
+    })
+  } else {
+    selectedService.value = null
+    router.push({
+      query: {
+        ...(route.query || {}),
+        service: undefined,
+      },
+    })
+  }
+}
+
+watch(() => servicesStatus.value, () => {
+  if (!hasFetchedServiceDetailOnInit.value && servicesStatus.value === 'default') {
+    const fetchedService = serviceStore.fetchServiceById(route.query.service as string)
+    toggleModal(fetchedService)
+    hasFetchedServiceDetailOnInit.value = true
+  }
 })
 </script>
 
 <style lang="scss" scoped>
+@import '@/assets/styles/variables';
+
 .service-catalog {
-  margin: 2rem auto;
-  max-width: 1366px;
-  padding: 0 20px;
+  // max-width: 1366px;
+  margin-top: 52px;
+  padding: 0 24px;
 }
 
 .catalog {
   display: flex;
   flex-wrap: wrap;
+  gap: 40px;
   list-style: none;
-  margin: 20px 0 0 0;
+  margin: 24px 0 0 0;
+  padding-inline-start: 0;
 }
 
-.service {
-  border: 1px solid #999;
-  border-radius: 10px;
-  margin: 6px;
-  padding: 8px 16px;
-  width: 200px;
-
-  p:first-of-type {
-    color: #333;
-    font-weight: 700;
+@media (max-width: $mobile) {
+  .service-catalog  {
+    margin-top: 24px;
   }
-
-  p {
-    color: #666;
-  }
-}
-
-input {
-  padding: 8px 4px;
 }
 </style>
