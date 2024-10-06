@@ -23,7 +23,7 @@ describe('AppImage.vue', () => {
     expect(loadingImage).toBeTruthy()
   })
 
-  it.only('renders the main image after loading', async () => {
+  it('renders the main image after loading', async () => {
     const wrapper = mountComponent(AppImage, {
       props: {
         src: 'image-src.jpg',

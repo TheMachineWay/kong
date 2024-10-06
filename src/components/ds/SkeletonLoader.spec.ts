@@ -11,8 +11,6 @@ describe('SkeletonLoader.vue', () => {
       },
     })
 
-    console.log(wrapper.html())
-
     const loader = wrapper.findTestId('skeleton-loader')
     expect(loader).toBeTruthy()
 

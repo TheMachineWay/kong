@@ -41,6 +41,7 @@ describe('ServiceCatalog', () => {
   beforeEach(() => {
     setActivePinia(createPinia())
   })
+
   it('shows the search input', async () => {
     // No `mockedResponses` modification needed; just use the default mocked response
     const wrapper = mountComponent(ServiceCatalog)

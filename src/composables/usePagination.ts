@@ -38,7 +38,7 @@ export default function usePagination(totalServices: ComputedRef<number>) {
   }
 
   onMounted(() => {
-    const page = Number(route.query.page)
+    const page = Number(route.query?.page)
     if (page) {
       currentPageNumber.value = page
     }
