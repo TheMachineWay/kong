@@ -1,18 +1,21 @@
 <template>
   <div
     class="loader"
+    :data-testid="dataTestId"
     :style="{ height, width, borderRadius: radius }"
   />
 </template>
 
 <script setup lang="ts">
 interface Props {
+  dataTestId?: string,
   height?: string,
   width?: string,
   radius?: string,
 }
 
 withDefaults(defineProps<Props>(), {
+  dataTestId: 'skeleton-loader',
   height: '32px',
   width: '100%',
   radius: '4px',

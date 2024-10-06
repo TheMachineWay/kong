@@ -2,6 +2,7 @@
   <div
     class="flag"
     :class="type || 'primary'"
+    :dataTestId="dataTestId || 'app-flag'"
   >
     {{ label }}
   </div>
@@ -10,7 +11,8 @@
 <script lang="ts" setup>
 defineProps<{
   type?: 'primary' | 'secondary',
-  label: string
+  label: string,
+  dataTestId?: string,
 }>()
 </script>
 

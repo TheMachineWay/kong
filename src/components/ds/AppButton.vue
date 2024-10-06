@@ -2,6 +2,7 @@
   <button
     :aria-label="ariaLabel"
     :class="buttonClass"
+    :data-testid="dataTestId || 'app-button'"
     :disabled="disabled"
     @click="emit('click', $event)"
   >
@@ -27,6 +28,7 @@ const props = defineProps<{
   leadingIcon?: string;
   type?: 'primary' | 'secondary' | 'icon';
   size?: 'large' | 'medium' | 'small';
+  dataTestId?: string;
 }>()
 
 const emit = defineEmits<{
